@@ -1282,14 +1282,17 @@ namespace fioio {
           auto nftsbyname = nftstable.get_index<"byaddress"_n>();
           auto owneriter = nftsbyname.find(nameHash);
 
+          fio_400_assert(nfts.size() + owneriter->nfts.size() <= 50, "", "", "Maximum 50 NFTs reached",
+                            ErrorInvalidFioNameFormat);
+
           for (auto nftobj = nfts.begin(); nftobj != nfts.end(); ++nftobj) {
 
             fio_400_assert(validateChainNameFormat(nftobj->chain_code.c_str()), "chain_code", nftobj->chain_code, "Invalid chain code format",
-                           ErrorInvalidFioNameFormat);
+                            ErrorInvalidFioNameFormat);
 
             if (!nftobj->url.empty()) {
               fio_400_assert(validateRFC3986Chars(nftobj->url.c_str()), "url", nftobj->url.c_str(), "Invalid URL",
-                             ErrorInvalidFioNameFormat);
+                            ErrorInvalidFioNameFormat);
             }
 
             if (!nftobj->hash.empty()) {
@@ -1305,39 +1308,46 @@ namespace fioio {
             fio_400_assert(!nftobj->contract_address.empty(),
                              "contract_address", nftobj->contract_address.c_str(), "Invalid Contract Address",
                            ErrorInvalidFioNameFormat);
+            nftinfo nfttemp;
 
-            for (auto nft_iter = owneriter->nfts.begin(); nft_iter != owneriter->nfts.end(); nft_iter++) {
-              // check if any duplicates in the nfts vector. If chain_code, contract_address, token_id already stored, update url, hash, metadata.
-              if (nft_iter->contract_address == nftobj->contract_address &&
-                  nft_iter->chain_code == nftobj->chain_code &&
-                  nft_iter->token_id == nftobj->token_id ) {
+            if (owneriter == nftsbyname.end()) {
 
+              nftstable.emplace(actor, [&](auto &n) {
+                n.id = nftstable.available_primary_key();
+                n.fio_address = fio_address;
+                n.fio_address_hash = string_to_uint128_hash(fio_address);
+                n.nfts = nfts;
+              });
 
-                  if (!nftobj->hash.empty() && !nftobj->url.empty() && !nftobj->metadata.empty()) {
-                      nftsbyname.modify(owneriter, actor, [&](auto &p) {
+            } else {
 
+              for (uint16_t nft_iter = 0; nft_iter <= owneriter->nfts.size(); nft_iter++) {
+                // check if any duplicates in the nfts vector. If chain_code, contract_address, token_id already stored, update url, hash, metadata.
+                if (owneriter->nfts[nft_iter].contract_address == nftobj->contract_address &&
+                    owneriter->nfts[nft_iter].chain_code == nftobj->chain_code &&
+                    owneriter->nfts[nft_iter].token_id == nftobj->token_id ) {
+
+                    fio_400_assert(!nftobj->hash.empty() && !nftobj->url.empty() && !nftobj->metadata.empty(), "token_id", nftobj->token_id.c_str(), "Nothing to update for this token_id",
+                           ErrorInvalidFioNameFormat);
+
+                    nfttemp.contract_address = nftobj->contract_address;
+                    nfttemp.chain_code = nftobj->chain_code;
+                    nfttemp.token_id = nftobj->token_id;
+                    nfttemp.hash = nftobj->hash;
+                    nfttemp.url = nftobj->url;
+                    nfttemp.metadata = nftobj->metadata;
+
+                    nftsbyname.modify(owneriter, actor, [&](auto &p) {
+                      p.nfts[nft_iter] = nfttemp;
                     });
 
-                  }
+                } //if
 
-              }
+              } //for (auto nft_iter
 
-            } //for (auto nft_iter
-
+            } // else
 
           } // for nftobj
-
-          //Create a new NFT record if valid fio address isn't in the nfts table yet
-          if(owneriter == nftsbyname.end()) {
-
-            nftstable.emplace(actor, [&](auto &n) {
-              n.id = nftstable.available_primary_key();
-              n.fio_address = fio_address;
-              n.fio_address_hash = string_to_uint128_hash(fio_address);
-              n.nfts = nfts;
-            });
-
-          } //if owneriter
 
            uint64_t fee_amount = 0;
 
