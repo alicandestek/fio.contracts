@@ -142,7 +142,7 @@ namespace fioio {
       uint64_t primary_key() const { return id; }
       uint128_t by_address() const { return fio_address_hash; }
 
-      EOSLIB_SERIALIZE(nft, (id)(fio_address)(nfts))
+      EOSLIB_SERIALIZE(nft, (id)(fio_address)(fio_address_hash)(nfts))
 
     };
 

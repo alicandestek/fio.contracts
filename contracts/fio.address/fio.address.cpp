@@ -1450,7 +1450,8 @@ namespace fioio {
            fio_400_assert(now() <=  get_time_plus_seconds(domains_iter->expiration,SECONDS30DAYS),
                           "domain", fa.fiodomain, "FIO Domain expired", ErrorDomainExpired);
 
-            auto contractsbyname = nftstable.get_index<"byaddress"_n>();
+            auto nftsbyname = nftstable.get_index<"byaddress"_n>();
+            auto owneriter = nftsbyname.find(nameHash);
 
             uint32_t count_erase = 0;
 
@@ -1467,7 +1468,19 @@ namespace fioio {
                               ErrorInvalidFioNameFormat);
               }
 
+              for (auto nft_iter = owneriter->nfts.begin(); nft_iter != owneriter->nfts.end(); nft_iter++) {
+                // check if any duplicates in the nfts vector. If chain_code, contract_address, token_id already stored, update url, hash, metadata.
+                if (nft_iter->contract_address == nftobj->contract_address &&
+                    nft_iter->chain_code == nftobj->chain_code &&
+                    nft_iter->token_id == nftobj->token_id ) {
 
+                    nftsbyname.modify(owneriter, actor, [&](auto &p) {
+                      p.nfts.erase(nft_iter);
+                    });
+
+                } //if
+
+              } //for (auto nft_iter
 
             } // for auto nftobj
 
