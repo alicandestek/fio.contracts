@@ -137,36 +137,6 @@
       ]
     },
     {
-      "name": "nftparam",
-      "base": "",
-      "fields": [
-        {
-          "name": "chain_code",
-          "type": "string"
-        },
-        {
-          "name": "contract_address",
-          "type": "string"
-        },
-        {
-          "name": "token_id",
-          "type": "string"
-        },
-        {
-          "name": "url",
-          "type": "string"
-        },
-        {
-          "name": "hash",
-          "type": "string"
-        },
-        {
-          "name": "metadata",
-          "type": "string"
-        },
-      ]
-    },
-    {
       "name": "remnftparam",
       "base": "",
       "fields": [
@@ -189,6 +159,36 @@
       "base": "",
       "fields": [
         {
+          "name": "chain_code",
+          "type": "string"
+        },
+        {
+          "name": "contract_address",
+          "type": "string"
+        },
+        {
+          "name": "token_id",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "name": "hash",
+          "type": "string"
+        },
+        {
+          "name": "metadata",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "nft",
+      "base": "",
+      "fields": [
+        {
           "name": "id",
           "type": "uint64"
         },
@@ -197,49 +197,13 @@
           "type": "string"
         },
         {
-          "name": "chain_code",
-          "type": "string"
-        },
-        {
-          "name": "chain_code_hash",
-          "type": "uint64"
-        },
-        {
-          "name": "token_id",
-          "type": "string"
-        },
-        {
-          "name": "token_id_hash",
-          "type": "uint128"
-        },
-        {
-          "name": "url",
-          "type": "string"
-        },
-        {
           "name": "fio_address_hash",
           "type": "uint128"
         },
         {
-          "name": "contract_address",
-          "type": "string"
-        },
-        {
-          "name": "contract_address_hash",
-          "type": "uint128"
-        },
-        {
-          "name": "hash",
-          "type": "string"
-        },
-        {
-          "name": "hash_index",
-          "type": "uint128"
-        },
-        {
-          "name": "metadata",
-          "type": "string"
-        },
+          "name": "nfts",
+          "type": "nftinfo[]"
+        }
       ]
     },
     {
@@ -555,7 +519,7 @@
           },
           {
             "name": "nfts",
-            "type": "nftparam[]"
+            "type": "nftinfo[]"
           },
           {
             "name": "max_fee",
@@ -742,7 +706,7 @@
     },
     {
       "name": "nfts",
-      "type": "nftinfo",
+      "type": "nft",
       "index_type": "i64",
       "key_names": [],
       "key_types": [],
