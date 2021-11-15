@@ -176,6 +176,7 @@ namespace eosiosystem {
                       acnt == TREASURYACCOUNT ||
                       acnt == STAKINGACCOUNT ||
                       acnt == FIOSYSTEMACCOUNT ||
+                      acnt == FIOORACLEContract ||
                       acnt == FIOACCOUNT),"set abi not permitted." );
 
 
@@ -209,7 +210,7 @@ namespace eosiosystem {
     //use this action to initialize the locked token holders table for the FIO protocol.
     void eosiosystem::system_contract::addlocked(const name &owner, const int64_t &amount,
             const int16_t &locktype) {
-        require_auth(_self);
+        require_auth(_self);        // TODO (Ben): Try commenting this out again if more auth troubles...
 
         check(is_account(owner),"account must pre exist");
         check(amount > 0,"cannot add locked token amount less or equal 0.");

@@ -34,11 +34,13 @@ namespace fioio {
     static const name AddressContract =   name("fio.address");
     static const name TPIDContract =      name("fio.tpid");
     static const name TokenContract =     name("fio.token");
-    static const name FOUNDATIONACCOUNT = name("tw4tjkmo4eyd");
+    static const name FOUNDATIONACCOUNT = name("htjonrkf1lgs"); //for local bpclaim testing
     static const name TREASURYACCOUNT =   name("fio.treasury");
     static const name STAKINGACCOUNT =   name("fio.staking");
     static const name FIOSYSTEMACCOUNT=   name("fio.system");
     static const name FIOACCOUNT =   name("fio");
+    static const name FIOORACLEContract = name("fio.oracle");
+    static const name EscrowContract    = name("fio.escrow");
 
     static constexpr name FIOISSUER = name("eosio"_n);
     static constexpr eosio::symbol FIOSYMBOL = eosio::symbol("FIO", 9);

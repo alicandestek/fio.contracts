@@ -11,7 +11,7 @@
 #define BPMAXTOMINT     50000000000000          // 50,000  FIO
 #define FDTNMAXRESERVE  181253654000000000      // 181,253,654 FIO
 #define BPMAXRESERVE    20000000000000000       // increase BP reserves FIP-23 to 20,000,000 FIO
-#define PAYSCHEDTIME    86401                   //seconds per day + 1
+#define PAYSCHEDTIME    10  //test change 86401                   //seconds per day + 1
 #define PAYABLETPIDS    100
 
 #include "fio.treasury.hpp"
@@ -399,8 +399,8 @@ public:
         void bprewdupdate(const uint64_t &amount) {
 
                 eosio_assert((has_auth(AddressContract) || has_auth(TokenContract) || has_auth(TREASURYACCOUNT) ||
-                             has_auth(STAKINGACCOUNT) ||  has_auth(REQOBTACCOUNT) || has_auth(SYSTEMACCOUNT) || has_auth(FeeContract)),
-                             "missing required authority of fio.address, fio.treasury, fio.fee, fio.token, fio.stakng, eosio or fio.reqobt");
+                             has_auth(STAKINGACCOUNT) || has_auth(REQOBTACCOUNT) || has_auth(SYSTEMACCOUNT) || has_auth(FeeContract) || has_auth(FIOORACLEContract)),
+                             "missing required authority of fio.address, fio.treasury, fio.fee, fio.token, fio.staking, fio.oracle, eosio or fio.reqobt");
 
                 bprewards.set(bprewards.exists() ? bpreward{bprewards.get().rewards + amount} : bpreward{amount}, get_self());
         }
@@ -410,8 +410,8 @@ public:
         void bppoolupdate(const uint64_t &amount) {
 
                 eosio_assert((has_auth(AddressContract) || has_auth(TokenContract) || has_auth(TREASURYACCOUNT) ||
-                             has_auth(REQOBTACCOUNT)),
-                             "missing required authority of fio.address, fio.treasury, fio.token, or fio.reqobt");
+                             has_auth(REQOBTACCOUNT) || has_auth(FIOORACLEContract)),
+                             "missing required authority of fio.address, fio.treasury, fio.token, fio.oracle or fio.reqobt");
                 bucketrewards.set(bucketrewards.exists() ? bucketpool{bucketrewards.get().rewards + amount} : bucketpool{amount}, get_self());
         }
 
@@ -419,8 +419,8 @@ public:
         [[eosio::action]]
         void fdtnrwdupdat(const uint64_t &amount) {
                 eosio_assert((has_auth(AddressContract) || has_auth(TokenContract) || has_auth(TREASURYACCOUNT) ||
-                             has_auth(STAKINGACCOUNT) || has_auth(REQOBTACCOUNT) || has_auth(SYSTEMACCOUNT) || has_auth(FeeContract)),
-                             "missing required authority of fio.address, fio.token, fio.fee, fio.treasury, fio.staking, or fio.reqobt");
+                             has_auth(STAKINGACCOUNT) || has_auth(REQOBTACCOUNT) || has_auth(SYSTEMACCOUNT) || has_auth(FeeContract) || has_auth(FIOORACLEContract)),
+                             "missing required authority of fio.address, fio.token, fio.fee, fio.treasury, fio.staking, fio.oracle or fio.reqobt");
 
                 fdtnrewards.set(fdtnrewards.exists() ? fdtnreward{fdtnrewards.get().rewards + amount} : fdtnreward{amount}, get_self());
         }
