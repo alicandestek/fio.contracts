@@ -39,6 +39,7 @@ namespace fioio {
     static const name STAKINGACCOUNT =   name("fio.staking");
     static const name FIOSYSTEMACCOUNT=   name("fio.system");
     static const name FIOACCOUNT =   name("fio");
+    static const name PNETWORKCONTRACT=   name("fio.pnetwork");
 
     static constexpr name FIOISSUER = name("eosio"_n);
     static constexpr eosio::symbol FIOSYMBOL = eosio::symbol("FIO", 9);

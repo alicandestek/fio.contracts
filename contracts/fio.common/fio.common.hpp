@@ -124,6 +124,7 @@ namespace fioio {
              actor == fioio::TokenContract ||
              actor == fioio::TREASURYACCOUNT ||
              actor == fioio::FIOSYSTEMACCOUNT ||
+             actor == fioio::PNETWORKCONTRACT ||
              actor == fioio::FIOACCOUNT);
     }
 
@@ -480,6 +481,7 @@ namespace fioio {
     static const uint64_t BUNDLEVOTERAM = 0; //integrated.
     static const uint64_t ADDNFTRAMBASE = 512;
     static const uint64_t ADDNFTRAM = 2048;
+    static const uint64_t PEGINOUT = 512; // pnetwork calls. Not yet integrated.
 
     static const uint64_t MAXOBTCONTENT = 436;
     static const uint64_t MAXFUNDSCONTENT = 300;
